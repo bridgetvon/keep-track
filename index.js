@@ -1,6 +1,7 @@
 const db = require('./db');
 const inquirer = require('inquirer');
 const { promise } = require('./db/connection');
+const { viewDepartments } = require('./db');
 require('console.table');
 
 
@@ -81,6 +82,7 @@ function addEmployee() {
     db.viewRoles()
       .then(([rows]) => {
         let roles = rows;
+        // map to gether employee roles from table 
         const roleChoices = roles.map(({ id, title }) => ({
           name: title,
           value: id
@@ -102,7 +104,7 @@ function addEmployee() {
                   name: `${first_name} ${last_name}`,
                   value: id
                 }));
-
+                //unshift to add new elements to beginning of array 
                 managerChoices.unshift({ name: "None", value: null });
 
                 inquirer.prompt({
@@ -126,9 +128,71 @@ function addEmployee() {
                   ))
                   .then(() => promptUser())
               })
-          })
-      })
-  })
+          });
+      });
+  });
+};
+
+function addRole() {
+    inquirer.prompt ([
+        {
+            name: 'newRole',
+            message: 'What is the role you want to add?'
+        },
+        {
+            name: 'newSalary',
+            message: 'What is the salary of this role?'
+        }
+    ])
+    .then(res => {
+        let newRole = res.role.title;
+        let newSalary = res.role.salary;
+
+        db.viewRoles()
+        .then(([rows]) => {
+          let roles = rows;
+          const roleChoices = roles.map(({ id, title }) => ({
+            name: title,
+            value: id
+          }));
+    })
+
+})
+};
+
+// function viewDepartments() {
+//     db.viewDepartments().then(([rows]) => {
+//         let department = rows;
+//         console.table(department);
+        
+//     }).then(() => promptUser());
+// };
+
+function addDepartment() {
+    inquirer.prompt (
+        {
+            name: 'newDept',
+            message: 'What is the name of the department you want to add?'
+        }
+    )
+    .then( res => {
+        let newDept = res.department.name;
+
+        db.viewDepartments()
+        newDept.unshift({ name: "None", value: null });
+
+        console.log(viewDepartments());
+    })
+
 }
+
+// function updateEmployee () {
+
+// }
+
+// function fireEmployee () {
+    
+// }
+
 
 
