@@ -145,17 +145,19 @@ function addRole() {
         }
     ])
     .then(res => {
-        let newRole = res.role.title;
-        let newSalary = res.role.salary;
+        let newRole = res.newRole;
+        let newSalary = res.newSalary;
 
         db.viewRoles()
         .then(([rows]) => {
           let roles = rows;
-          const roleChoices = roles.map(({ id, title }) => ({
-            name: title,
+          const roleChoices = roles.map(({ id, newRole }) => ({
+            name: newRole,
             value: id
           }));
     })
+
+    .then(() => promptUser())
 
 })
 };
@@ -193,6 +195,10 @@ function addDepartment() {
 // function fireEmployee () {
     
 // }
+
+function viewRoles () {
+
+}
 
 
 
